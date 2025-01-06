@@ -29,6 +29,7 @@ const Navbar = () => {
           <button onClick={handleLogOut} className="">
             Logout
           </button>
+          <span>{user?.displayName}</span>
         </>
       ) : (
         <>
