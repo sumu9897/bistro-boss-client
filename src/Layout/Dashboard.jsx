@@ -1,14 +1,14 @@
-import { Outlet } from "react-router-dom"
+import { NavLink, Outlet } from "react-router-dom"
 
 const Dashboard = () => {
   return (
-    <div>
+    <div className="flex">
       <div className="w-64 min-h-full bg-primary">
         <ul className="menu">
-            <li></li>
+            <li><NavLink to={'/dashboard/cart'}>My Cart</NavLink></li>
         </ul>
       </div>
-      <div><Outlet/></div>
+      <div className="flex-1"><Outlet/></div>
 
     </div>
   )
