@@ -3,57 +3,65 @@ import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../providers/AuthProvider";
-import signup from "../../assets/signup/signup.png"
+import signup from "../../assets/signup/signup.png";
 import Swal from "sweetalert2";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const SignUp = () => {
+  const axiosPublic = useAxiosPublic();
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm();
-  const {createUser, updateUserProfile} = useContext(AuthContext);
+  const { createUser, updateUserProfile } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const onSubmit = (data) => {
-    console.log(data);
-    createUser(data.email, data.password)
-    .then(result => {
-        const loggedUser =result.user;
-        console.log(loggedUser);
-        updateUserProfile(data.name, data.photoURL)
+    // console.log(data);
+    createUser(data.email, data.password).then((result) => {
+      const loggedUser = result.user;
+      console.log(loggedUser);
+      updateUserProfile(data.name, data.photoURL)
         .then(() => {
-            console.log('user profile info updated')
-            reset();
-            Swal.fire({
-                position: 'top-end',
-                icon: 'success',
-                title: 'User Added Successfully',
+          // console.log('user profile info updated')
+          const userInfo = {
+            name: data.name,
+            email: data.email,
+          };
+          axiosPublic.post("/users", userInfo).then((res) => {
+            if (res.data.insertedId) {
+              console.log('user addes to the database')
+              reset();
+              Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "User Added Successfully",
                 showConfirmButton: false,
-                timer: 1500
-            })
-            navigate('/');
+                timer: 1500,
+              });
+              navigate("/");
+            }
+          });
         })
-        .catch(error => console.log(error))
-    })
+        .catch((error) => console.log(error));
+    });
   };
 
   //   console.log(watch("example"))
   return (
     <>
-    <Helmet>
+      <Helmet>
         <title>Bistro Boss | signup</title>
-    </Helmet>
+      </Helmet>
       <div className="hero bg-base-200 min-h-screen">
         <div className="hero-content flex-col lg:flex-row-reverse gap-x-20">
           <div className="text-center lg:text-left">
-            
-            
             <img src={signup} className="size-96 mx-auto" alt="" />
           </div>
           <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
-          <h1 className="text-4xl font-bold text-center">Sign Up</h1>
+            <h1 className="text-4xl font-bold text-center">Sign Up</h1>
             <form onSubmit={handleSubmit(onSubmit)} className="card-body">
               <div className="form-control">
                 <label className="label">
@@ -148,7 +156,7 @@ const SignUp = () => {
                 />
               </div>
             </form>
-            <p className="text-center text-primary pb-4">
+            <p className="text-center text-primary pb-4 ">
               <small>
                 Already registered <Link to="/login">Go to log in</Link>
               </small>
