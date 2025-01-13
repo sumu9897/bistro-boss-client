@@ -6,6 +6,7 @@ import { AuthContext } from "../../providers/AuthProvider";
 import signup from "../../assets/signup/signup.png";
 import Swal from "sweetalert2";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
+import SocialLogin from "../../components/SocialLogin/SocialLogin";
 
 const SignUp = () => {
   const axiosPublic = useAxiosPublic();
@@ -161,6 +162,7 @@ const SignUp = () => {
                 Already registered <Link to="/login">Go to log in</Link>
               </small>
             </p>
+            <SocialLogin></SocialLogin>
           </div>
         </div>
       </div>
